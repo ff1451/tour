@@ -338,6 +338,32 @@ export const tourApi = {
       return null;
     }
   },
+
+  /**
+   * 여행 코스 검색 (contentTypeId: 25)
+   */
+  searchTourCourse: async (params: AreaBasedSearchParams): Promise<TourItem[]> => {
+    try {
+      const response = await api.get('/areaBasedList2', {
+        params: {
+          ...getCommonParams(),
+          contentTypeId: '25', // 여행코스
+          numOfRows: params.numOfRows || 12,
+          pageNo: params.pageNo || 1,
+          arrange: params.arrange || 'O',
+          areaCode: params.areaCode,
+          sigunguCode: params.sigunguCode,
+          cat1: params.cat1,
+          cat2: params.cat2,
+          cat3: params.cat3,
+        },
+      });
+      return response.data.response?.body?.items?.item || [];
+    } catch (error) {
+      console.error('여행 코스 검색 실패:', error);
+      return [];
+    }
+  },
 };
 
 export default tourApi;

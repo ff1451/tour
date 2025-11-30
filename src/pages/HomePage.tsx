@@ -11,9 +11,11 @@ import {
   Heart,
   Loader2,
   AlertCircle,
+  User,
 } from 'lucide-react';
 import tourApi from '../services/tourApi';
 import type { TourItem, Festival as FestivalType } from '../services/types';
+import { Link } from 'react-router-dom';
 
 interface PopularDestination {
   id: string;
@@ -124,6 +126,17 @@ const HomePage: React.FC = () => {
   // 검색 핸들러 - SearchPage로 이동
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
+
+    // 검색 기록 저장
+    const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+    const newHistoryItem = {
+      id: Date.now().toString(),
+      query: searchQuery,
+      timestamp: new Date().toISOString(),
+    };
+    const updatedHistory = [newHistoryItem, ...searchHistory].slice(0, 50);
+    localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+
     window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
   };
 
@@ -187,6 +200,7 @@ const HomePage: React.FC = () => {
       <header className="fixed top-0 right-0 left-0 z-50 border-b border-gray-200/50 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
+            {/* Logo */}
             <div className="flex items-center space-x-3">
               <div className="flex h-10 w-10 rotate-3 transform items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600">
                 <MapPin className="h-6 w-6 text-white" />
@@ -196,23 +210,43 @@ const HomePage: React.FC = () => {
               </h1>
             </div>
 
+            {/* Desktop Navigation */}
             <nav className="hidden items-center space-x-8 md:flex">
-              <a href="#destinations" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
+              <Link to="/destinations" className="font-medium text-gray-700 hover:text-blue-600">
                 여행지
-              </a>
-              <a href="/festivals" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
+              </Link>
+              <Link to="/festivals" className="font-medium text-gray-700 hover:text-blue-600">
                 축제
-              </a>
-              <a href="/accommodations" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
+              </Link>
+              <Link to="/accommodations" className="font-medium text-gray-700 hover:text-blue-600">
                 숙박
-              </a>
-              <a href="#" className="font-medium text-gray-700 transition-colors hover:text-blue-600">
-                여행계획
-              </a>
-              <button className="transform rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 font-medium text-white transition-all hover:scale-105 hover:shadow-lg">
+              </Link>
+              <Link to="/courses" className="font-medium text-gray-700 hover:text-blue-600">
+                여행코스
+              </Link>
+              <Link
+                to="/my-trip"
+                className="rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 font-medium text-white hover:scale-105 hover:shadow-lg"
+              >
                 내 여행
-              </button>
+              </Link>
+              <Link
+                to="/mypage"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200"
+                title="마이페이지"
+              >
+                <User className="h-5 w-5 text-gray-700" />
+              </Link>
             </nav>
+
+            {/* Mobile MyPage Icon */}
+            <Link
+              to="/mypage"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 md:hidden"
+              title="마이페이지"
+            >
+              <User className="h-5 w-5 text-gray-700" />
+            </Link>
           </div>
         </div>
       </header>
@@ -298,10 +332,13 @@ const HomePage: React.FC = () => {
               <h3 className="mb-2 text-3xl font-bold text-gray-900 md:text-4xl">인기 여행지</h3>
               <p className="text-gray-600">많은 여행자들이 찾는 명소를 둘러보세요</p>
             </div>
-            <button className="hidden items-center space-x-2 font-semibold text-blue-600 transition-all hover:space-x-3 md:flex">
+            <a
+              href="/destinations"
+              className="hidden items-center space-x-2 font-semibold text-blue-600 transition-all hover:space-x-3 md:flex"
+            >
               <span>전체보기</span>
               <ChevronRight className="h-5 w-5" />
-            </button>
+            </a>
           </div>
 
           {/* 로딩 상태 */}
@@ -451,9 +488,12 @@ const HomePage: React.FC = () => {
               <p className="mx-auto mb-8 max-w-2xl text-xl text-white/90">
                 원하는 여행지를 선택하고, 일정을 구성하고, 완벽한 여행을 만들어보세요
               </p>
-              <button className="transform rounded-full bg-white px-8 py-4 text-lg font-bold text-blue-600 transition-all hover:scale-105 hover:shadow-2xl">
+              <Link
+                to="/my-trip"
+                className="transform rounded-full bg-white px-8 py-4 text-lg font-bold text-blue-600 transition-all hover:scale-105 hover:shadow-2xl"
+              >
                 여행 계획 시작하기
-              </button>
+              </Link>
             </div>
           </div>
         </div>

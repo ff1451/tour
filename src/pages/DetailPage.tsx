@@ -45,8 +45,16 @@ const DetailPage: React.FC = () => {
   useEffect(() => {
     if (contentId) {
       loadDetailData(contentId);
+      checkFavoriteStatus(contentId);
     }
   }, [contentId]);
+
+  // 즐겨찾기 상태 확인
+  const checkFavoriteStatus = (id: string) => {
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const isFav = favorites.some((item: any) => item.contentid === id);
+    setIsFavorite(isFav);
+  };
 
   const loadDetailData = async (id: string) => {
     try {
@@ -87,8 +95,30 @@ const DetailPage: React.FC = () => {
   };
 
   const handleFavorite = () => {
+    if (!detail?.common) return;
+
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const favoriteItem = {
+      contentid: detail.common.contentid,
+      title: detail.common.title,
+      addr1: detail.common.addr1,
+      firstimage: detail.common.firstimage,
+      firstimage2: detail.common.firstimage2,
+      contenttypeid: detail.common.contenttypeid,
+      savedAt: new Date().toISOString(),
+    };
+
+    let updatedFavorites;
+    if (isFavorite) {
+      // 즐겨찾기 제거
+      updatedFavorites = favorites.filter((item: any) => item.contentid !== detail.common.contentid);
+    } else {
+      // 즐겨찾기 추가
+      updatedFavorites = [favoriteItem, ...favorites];
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
     setIsFavorite(!isFavorite);
-    // TODO: LocalStorage에 저장
   };
 
   const handleShare = async () => {
@@ -252,7 +282,7 @@ const DetailPage: React.FC = () => {
             target.src = 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1200';
           }}
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
         {/* 타이틀 오버레이 */}
         <div className="absolute right-0 bottom-0 left-0 p-8 text-white md:p-12">
@@ -349,7 +379,7 @@ const DetailPage: React.FC = () => {
                         setCurrentImageIndex(index);
                         setShowGallery(true);
                       }}
-                      className="group relative aspect-4/3 overflow-hidden rounded-xl"
+                      className="group relative aspect-[4/3] overflow-hidden rounded-xl"
                     >
                       <img
                         src={img.originimgurl}
@@ -362,7 +392,7 @@ const DetailPage: React.FC = () => {
                   {images.length > 6 && (
                     <button
                       onClick={() => setShowGallery(true)}
-                      className="flex aspect-4/3 items-center justify-center rounded-xl bg-gray-900 text-xl font-bold text-white transition-colors hover:bg-gray-800"
+                      className="flex aspect-[4/3] items-center justify-center rounded-xl bg-gray-900 text-xl font-bold text-white transition-colors hover:bg-gray-800"
                     >
                       +{images.length - 6}
                     </button>
@@ -375,7 +405,7 @@ const DetailPage: React.FC = () => {
           {/* 사이드바 */}
           <div className="space-y-6">
             {/* 빠른 정보 */}
-            <div className="rounded-2xl bg-linear-to-br from-blue-50 to-indigo-50 p-6">
+            <div className="sticky top-24 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
               <h3 className="mb-4 font-bold text-gray-900">빠른 정보</h3>
 
               {common.addr1 && (
@@ -450,7 +480,7 @@ const InfoItem: React.FC<{ icon: React.ReactNode; label: string; value: string }
 
   return (
     <div className="flex items-start space-x-3 border-b border-gray-100 py-3 last:border-0">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
         {icon}
       </div>
       <div className="flex-1">

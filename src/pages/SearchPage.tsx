@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Search, MapPin, X, Loader2, AlertCircle, Grid, List } from 'lucide-react';
+import { Search, Filter, MapPin, X, Loader2, AlertCircle, Grid, List } from 'lucide-react';
 import tourApi from '../services/tourApi';
-import type { TourItem } from '../services/types';
+import type { TourItem, ContentType } from '../services/types';
 
 const SearchPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -123,6 +123,18 @@ const SearchPage: React.FC = () => {
   // 검색 실행
   const performSearch = async (searchQuery: string, page: number = 1) => {
     if (!searchQuery.trim()) return;
+
+    // 검색 기록 저장 (첫 페이지 검색 시에만)
+    if (page === 1) {
+      const searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+      const newHistoryItem = {
+        id: Date.now().toString(),
+        query: searchQuery,
+        timestamp: new Date().toISOString(),
+      };
+      const updatedHistory = [newHistoryItem, ...searchHistory].slice(0, 50); // 최대 50개
+      localStorage.setItem('searchHistory', JSON.stringify(updatedHistory));
+    }
 
     try {
       setLoading(true);
