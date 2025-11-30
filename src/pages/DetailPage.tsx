@@ -12,6 +12,7 @@ import {
   Navigation,
   Calendar,
   Users,
+  Utensils,
   ParkingCircle,
   Loader2,
   AlertCircle,
@@ -334,30 +335,264 @@ const DetailPage: React.FC = () => {
             <section className="rounded-2xl border border-gray-200 bg-white p-8">
               <h2 className="mb-6 text-2xl font-bold text-gray-900">상세 정보</h2>
               <div className="space-y-4">
-                {/* 관광지별 상세 정보 */}
+                {/* 콘텐츠 타입별 상세 정보 */}
                 {intro && Object.keys(intro).length > 0 && (
                   <>
-                    {intro.infocenter && (
-                      <InfoItem icon={<Phone className="h-5 w-5" />} label="문의" value={intro.infocenter} />
+                    {/* 관광지(12) */}
+                    {common.contenttypeid === '12' && (
+                      <>
+                        {intro.infocenter && (
+                          <InfoItem
+                            icon={<Phone className="h-5 w-5" />}
+                            label="문의 및 안내"
+                            value={intro.infocenter}
+                          />
+                        )}
+                        {intro.usetime && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="이용시간" value={intro.usetime} />
+                        )}
+                        {intro.restdate && (
+                          <InfoItem icon={<Calendar className="h-5 w-5" />} label="휴무일" value={intro.restdate} />
+                        )}
+                        {intro.parking && (
+                          <InfoItem
+                            icon={<ParkingCircle className="h-5 w-5" />}
+                            label="주차시설"
+                            value={intro.parking}
+                          />
+                        )}
+                        {intro.chkbabycarriage && (
+                          <InfoItem
+                            icon={<Users className="h-5 w-5" />}
+                            label="유모차 대여"
+                            value={intro.chkbabycarriage}
+                          />
+                        )}
+                        {intro.chkpet && (
+                          <InfoItem icon={<Users className="h-5 w-5" />} label="반려동물 동반" value={intro.chkpet} />
+                        )}
+                      </>
                     )}
-                    {intro.usetime && (
-                      <InfoItem icon={<Clock className="h-5 w-5" />} label="이용시간" value={intro.usetime} />
+
+                    {/* 문화시설(14) */}
+                    {common.contenttypeid === '14' && (
+                      <>
+                        {intro.infocenterculture && (
+                          <InfoItem
+                            icon={<Phone className="h-5 w-5" />}
+                            label="문의 및 안내"
+                            value={intro.infocenterculture}
+                          />
+                        )}
+                        {intro.usetimeculture && (
+                          <InfoItem
+                            icon={<Clock className="h-5 w-5" />}
+                            label="이용시간"
+                            value={intro.usetimeculture}
+                          />
+                        )}
+                        {intro.restdateculture && (
+                          <InfoItem
+                            icon={<Calendar className="h-5 w-5" />}
+                            label="휴무일"
+                            value={intro.restdateculture}
+                          />
+                        )}
+                        {intro.parkingculture && (
+                          <InfoItem
+                            icon={<ParkingCircle className="h-5 w-5" />}
+                            label="주차시설"
+                            value={intro.parkingculture}
+                          />
+                        )}
+                        {intro.usefee && (
+                          <InfoItem icon={<DollarSign className="h-5 w-5" />} label="입장료" value={intro.usefee} />
+                        )}
+                        {intro.chkbabycarriageculture && (
+                          <InfoItem
+                            icon={<Users className="h-5 w-5" />}
+                            label="유모차 대여"
+                            value={intro.chkbabycarriageculture}
+                          />
+                        )}
+                        {intro.chkpetculture && (
+                          <InfoItem
+                            icon={<Users className="h-5 w-5" />}
+                            label="반려동물 동반"
+                            value={intro.chkpetculture}
+                          />
+                        )}
+                      </>
                     )}
-                    {intro.restdate && (
-                      <InfoItem icon={<Calendar className="h-5 w-5" />} label="휴무일" value={intro.restdate} />
+
+                    {/* 축제/행사(15) */}
+                    {common.contenttypeid === '15' && (
+                      <>
+                        {intro.sponsor1 && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="주최" value={intro.sponsor1} />
+                        )}
+                        {intro.sponsor2 && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="주관" value={intro.sponsor2} />
+                        )}
+                        {intro.eventplace && (
+                          <InfoItem icon={<MapPin className="h-5 w-5" />} label="행사장소" value={intro.eventplace} />
+                        )}
+                        {intro.eventstartdate && intro.eventenddate && (
+                          <InfoItem
+                            icon={<Calendar className="h-5 w-5" />}
+                            label="행사기간"
+                            value={`${intro.eventstartdate} ~ ${intro.eventenddate}`}
+                          />
+                        )}
+                        {intro.playtime && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="공연시간" value={intro.playtime} />
+                        )}
+                        {intro.program && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="행사 프로그램" value={intro.program} />
+                        )}
+                        {intro.usetimefestival && (
+                          <InfoItem
+                            icon={<DollarSign className="h-5 w-5" />}
+                            label="이용요금"
+                            value={intro.usetimefestival}
+                          />
+                        )}
+                      </>
                     )}
-                    {intro.parking && (
-                      <InfoItem icon={<ParkingCircle className="h-5 w-5" />} label="주차" value={intro.parking} />
+
+                    {/* 여행 코스(25) */}
+                    {common.contenttypeid === '25' && (
+                      <>
+                        {intro.infocentertourcourse && (
+                          <InfoItem
+                            icon={<Phone className="h-5 w-5" />}
+                            label="문의 및 안내"
+                            value={intro.infocentertourcourse}
+                          />
+                        )}
+                        {intro.distance && (
+                          <InfoItem
+                            icon={<Navigation className="h-5 w-5" />}
+                            label="코스 총 거리"
+                            value={intro.distance}
+                          />
+                        )}
+                        {intro.taketime && (
+                          <InfoItem
+                            icon={<Clock className="h-5 w-5" />}
+                            label="코스 총 소요시간"
+                            value={intro.taketime}
+                          />
+                        )}
+                        {intro.theme && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="코스 테마" value={intro.theme} />
+                        )}
+                        {intro.schedule && (
+                          <InfoItem icon={<Calendar className="h-5 w-5" />} label="코스 일정" value={intro.schedule} />
+                        )}
+                      </>
                     )}
-                    {intro.chkpet && (
-                      <InfoItem icon={<Users className="h-5 w-5" />} label="반려동물" value={intro.chkpet} />
+
+                    {/* 숙박(32) */}
+                    {common.contenttypeid === '32' && (
+                      <>
+                        {intro.infocenterlodging && (
+                          <InfoItem
+                            icon={<Phone className="h-5 w-5" />}
+                            label="문의 및 안내"
+                            value={intro.infocenterlodging}
+                          />
+                        )}
+                        {intro.checkintime && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="체크인" value={intro.checkintime} />
+                        )}
+                        {intro.checkouttime && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="체크아웃" value={intro.checkouttime} />
+                        )}
+                        {intro.parkinglodging && (
+                          <InfoItem
+                            icon={<ParkingCircle className="h-5 w-5" />}
+                            label="주차시설"
+                            value={intro.parkinglodging}
+                          />
+                        )}
+                        {intro.roomcount && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="객실수" value={intro.roomcount} />
+                        )}
+                        {intro.roomtype && (
+                          <InfoItem icon={<Info className="h-5 w-5" />} label="객실유형" value={intro.roomtype} />
+                        )}
+                        {intro.chkcooking && (
+                          <InfoItem
+                            icon={<Utensils className="h-5 w-5" />}
+                            label="취사 가능 여부"
+                            value={intro.chkcooking}
+                          />
+                        )}
+                      </>
                     )}
-                    {intro.usefeefestival && (
-                      <InfoItem
-                        icon={<DollarSign className="h-5 w-5" />}
-                        label="이용요금"
-                        value={intro.usefeefestival}
-                      />
+
+                    {/* 음식점(39) */}
+                    {common.contenttypeid === '39' && (
+                      <>
+                        {intro.infocenterfood && (
+                          <InfoItem
+                            icon={<Phone className="h-5 w-5" />}
+                            label="문의 및 안내"
+                            value={intro.infocenterfood}
+                          />
+                        )}
+                        {intro.opentimefood && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="영업시간" value={intro.opentimefood} />
+                        )}
+                        {intro.restdatefood && (
+                          <InfoItem icon={<Calendar className="h-5 w-5" />} label="휴무일" value={intro.restdatefood} />
+                        )}
+                        {intro.firstmenu && (
+                          <InfoItem icon={<Utensils className="h-5 w-5" />} label="대표 메뉴" value={intro.firstmenu} />
+                        )}
+                        {intro.treatmenu && (
+                          <InfoItem icon={<Utensils className="h-5 w-5" />} label="취급 메뉴" value={intro.treatmenu} />
+                        )}
+                        {intro.parkingfood && (
+                          <InfoItem
+                            icon={<ParkingCircle className="h-5 w-5" />}
+                            label="주차시설"
+                            value={intro.parkingfood}
+                          />
+                        )}
+                        {intro.seat && (
+                          <InfoItem icon={<Users className="h-5 w-5" />} label="좌석수" value={intro.seat} />
+                        )}
+                      </>
+                    )}
+
+                    {/* 기타 콘텐츠 - 기본 정보 */}
+                    {!['12', '14', '15', '25', '32', '39'].includes(common.contenttypeid) && (
+                      <>
+                        {intro.infocenter && (
+                          <InfoItem icon={<Phone className="h-5 w-5" />} label="문의" value={intro.infocenter} />
+                        )}
+                        {intro.usetime && (
+                          <InfoItem icon={<Clock className="h-5 w-5" />} label="이용시간" value={intro.usetime} />
+                        )}
+                        {intro.restdate && (
+                          <InfoItem icon={<Calendar className="h-5 w-5" />} label="휴무일" value={intro.restdate} />
+                        )}
+                        {intro.parking && (
+                          <InfoItem icon={<ParkingCircle className="h-5 w-5" />} label="주차" value={intro.parking} />
+                        )}
+                        {intro.chkpet && (
+                          <InfoItem icon={<Users className="h-5 w-5" />} label="반려동물" value={intro.chkpet} />
+                        )}
+                        {intro.usefeefestival && (
+                          <InfoItem
+                            icon={<DollarSign className="h-5 w-5" />}
+                            label="이용요금"
+                            value={intro.usefeefestival}
+                          />
+                        )}
+                      </>
                     )}
                   </>
                 )}
